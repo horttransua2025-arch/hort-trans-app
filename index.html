@@ -167,7 +167,7 @@ input:focus, select:focus { border-color: #FFD700 !important; }
 </div>
 
 <script>
-const API = "http://localhost:8000/api";   // ⚠️ ЗМІНІТЬ, якщо бекенд не локальний
+const API = "https://hort-backend.onrender.com/api";   // ⚠️ ЗМІНІТЬ, якщо бекенд не локальний
 let MY_ID = localStorage.getItem("hort_uid");
 let MY_NICK = localStorage.getItem("hort_nick");
 let allDrivers = [];
@@ -199,7 +199,7 @@ async function login() {
     document.getElementById('auth-modal').classList.remove('show');
     init();
   } catch (e) {
-    err.textContent = "Помилка з'єднання з сервером";
+    err.textContent = "Помилка зєднання з сервером";
   }
 }
 
