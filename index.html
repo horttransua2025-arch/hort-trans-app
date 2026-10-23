@@ -3,116 +3,202 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>HORT TRANS</title>
+<title>HORT TRANS CASINO</title>
 <link rel="manifest" href="manifest.json">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-* { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-body { background: #0A192F; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 70px; overflow-x: hidden; }
-.card { background: linear-gradient(145deg, #112240, #0A192F); border: 1px solid #1E3A8A; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-.btn { background: linear-gradient(90deg, #FFD700, #FFA500); color: #0A192F; font-weight: bold; border: none; cursor: pointer; transition: transform 0.1s; }
+/* ================= АНІМОВАНИЙ ФОН ================= */
+body { background-color: #050A15; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 70px; overflow-x: hidden; position: relative; }
+.bg-orbs { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; }
+.orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: float 10s infinite alternate ease-in-out; }
+.orb-1 { width: 300px; height: 300px; background: #0057B7; top: -50px; left: -100px; }
+.orb-2 { width: 250px; height: 250px; background: #FFD700; bottom: 20%; right: -100px; animation-delay: -5s; }
+.orb-3 { width: 200px; height: 200px; background: #00BFFF; top: 40%; left: 30%; animation-duration: 15s; }
+@keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.2); } }
+
+/* ================= СКЛО ТА КНОПКИ ================= */
+.card-glass { background: rgba(17, 34, 64, 0.75); backdrop-filter: blur(15px); border: 1px solid rgba(0, 191, 255, 0.3); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.btn { background: linear-gradient(135deg, #FFD700, #FFA500); color: #0A192F; font-weight: 800; border: none; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4); transition: all 0.2s; text-transform: uppercase; }
 .btn:active { transform: scale(0.95); }
-.btn-blue { background: linear-gradient(90deg, #00BFFF, #0057B7); color: #fff; font-weight: bold; border: none; cursor: pointer; }
-.bottom-nav { background: rgba(17, 34, 64, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #1E3A8A; position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; }
-.nav-item { color: #8892B0; display: flex; flex-direction: column; align-items: center; font-size: 11px; flex: 1; cursor: pointer; }
-.nav-item.active { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
-.nav-item i { font-size: 18px; margin-bottom: 2px; }
-.page { display: none; } .page.active { display: block; animation: fadeIn .4s; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(15px);} to {opacity:1; transform:translateY(0);} }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; z-index: 200; align-items: flex-end; backdrop-filter: blur(5px); }
+.btn-blue { background: linear-gradient(135deg, #00BFFF, #0057B7); color: #fff; box-shadow: 0 5px 15px rgba(0, 191, 255, 0.4); }
+.btn-red { background: linear-gradient(135deg, #ff4b4b, #cc0000); color: #fff; box-shadow: 0 5px 15px rgba(255, 75, 75, 0.4); }
+
+.bottom-nav { background: rgba(10, 25, 47, 0.9); backdrop-filter: blur(20px); border-top: 1px solid rgba(0, 191, 255, 0.2); position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
+.nav-item { color: #8892B0; display: flex; flex-direction: column; align-items: center; font-size: 11px; flex: 1; cursor: pointer; transition: all 0.3s; }
+.nav-item.active { color: #FFD700; text-shadow: 0 0 10px #FFD700; transform: translateY(-2px); }
+.nav-item i { font-size: 20px; margin-bottom: 4px; }
+.page { display: none; padding: 15px; } .page.active { display: block; animation: slideUp 0.4s ease-out; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px);} to {opacity:1; transform:translateY(0);} }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); backdrop-filter: blur(8px); display: none; z-index: 200; align-items: center; justify-content: center; }
 .modal-overlay.show { display: flex; }
-.modal-box { background: linear-gradient(180deg, #112240, #0A192F); width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 24px 24px 0 0; padding: 20px; border-top: 2px solid #00BFFF; }
-input, select { background: #0A192F !important; border: 1px solid #1E3A8A !important; color: #fff !important; border-radius: 10px; padding: 12px; width: 100%; outline: none; }
-.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700; }
-.playing-card { width: 55px; height: 80px; background: #fff; border-radius: 8px; color: #000; display: inline-flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: bold; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.6); margin: 2px; cursor: pointer; transition: transform 0.2s; animation: dealCard 0.3s ease-out; }
-@keyframes dealCard { from { transform: translateY(-50px) rotate(10deg); opacity: 0; } to { transform: translateY(0) rotate(0); opacity: 1; } }
-.playing-card.red { color: #d32f2f; }
-.playing-card.back { background: repeating-linear-gradient(45deg, #1E3A8A, #1E3A8A 5px, #0A192F 5px, #0A192F 10px); border: 2px solid #fff; }
-.table-zone { position: relative; min-height: 200px; background: #0f4c3a; border: 4px solid #5c3a21; border-radius: 50% / 20%; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 50px rgba(0,0,0,0.8); }
+.modal-box { width: 95%; max-width: 400px; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 20px; position: relative; }
+
+/* ================= СТІЛ ДУРНЯ ================= */
+.durak-table-container { position: relative; background: radial-gradient(circle, #1b5e20, #0a2a0c); border: 10px solid #4e342e; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 50px rgba(0,0,0,0.7); height: 350px; margin: 10px 0; display: flex; flex-direction: column; justify-content: space-between; padding: 10px; overflow: hidden; }
+.deck-area { position: absolute; top: 15px; right: 15px; }
+.discard-area { position: absolute; top: 15px; left: 15px; }
+.table-center { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+.table-card-wrapper { position: relative; width: 60px; height: 90px; margin: 0 -15px; transition: all 0.3s; }
+
+/* ================= КАРТИ ТА ІГРИ ================= */
+.card-real { width: 60px; height: 90px; background: #fff; border-radius: 6px; box-shadow: 2px 2px 8px rgba(0,0,0,0.6); position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: 900; font-size: 16px; }
+.card-real.red { color: #d32f2f; }
+.card-real.black { color: #111; }
+.card-real .top-suit { align-self: flex-start; line-height: 1; }
+.card-real .bottom-suit { align-self: flex-end; line-height: 1; transform: rotate(180deg); }
+.card-real.back { background: repeating-linear-gradient(45deg, #0A192F, #0A192F 5px, #1E3A8A 5px, #1E3A8A 10px); border: 3px solid #fff; box-sizing: border-box; }
+.card-real.back::after { content: "HC"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.2); font-size: 20px; font-weight: bold; }
+
+.slot-machine-bg { background: linear-gradient(180deg, #b71c1c, #4a0000); border: 5px solid #ffd700; border-radius: 20px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+.slot-reel { background: #fff; border-radius: 10px; width: 70px; height: 90px; display: flex; align-items: center; justify-content: center; font-size: 45px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); border: 2px solid #ccc; }
+.bj-table { background: radial-gradient(circle at top, #1b5e20, #0a2a0c); border-radius: 50% 50% 10px 10px / 20% 20% 10px 10px; border: 5px solid #4e342e; padding: 20px; min-height: 400px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: inset 0 0 50px rgba(0,0,0,0.8); }
+.mines-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 280px; margin: 0 auto; }
+.mine-cell { background: #1E3A8A; height: 70px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; border: 1px solid #00BFFF; }
+.mine-cell.bomb { background: #d32f2f; } .mine-cell.gem { background: #4CAF50; }
+
+/* Шашки */
+.checkers-board { display: grid; grid-template-columns: repeat(8, 1fr); width: 100%; max-width: 300px; margin: 0 auto; border: 4px solid #4e342e; }
+.checker-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+.checker-cell.light { background: #f0d9b5; } .checker-cell.dark { background: #b58863; }
+.checker-piece { width: 70%; height: 70%; border-radius: 50%; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+.checker-piece.white { background: radial-gradient(circle, #fff, #ccc); }
+.checker-piece.red { background: radial-gradient(circle, #ff4b4b, #cc0000); }
 </style>
 </head>
-<body class="p-4">
+<body>
 
+<!-- АНІМОВАНИЙ ФОН -->
+<div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+<!-- АВТОРИЗАЦІЯ -->
 <div id="auth-modal" class="modal-overlay show">
-  <div class="modal-box text-center">
-    <h2 class="text-2xl font-bold text-yellow-400 mb-2">HORT TRANS</h2>
-    <input type="text" id="auth-input" placeholder="Ваш нік TruckBook" class="mb-3" autocomplete="off">
-    <button onclick="login()" class="btn w-full py-3 rounded-xl">Увійти</button>
-    <div id="auth-error" class="mt-3 text-sm text-red-500"></div>
+  <div class="modal-box card-glass text-center">
+    <img src="https://i.ibb.co/s9hCHsQB/7d812568-b15c-40a4-b21e-2630a1a60ecb.png" class="w-24 mx-auto mb-4 drop-shadow-[0_0_15px_rgba(255,215,0,0.5)]">
+    <h2 class="text-2xl font-black text-yellow-400 mb-2 tracking-widest">HORT TRANS</h2>
+    <p class="text-sm text-gray-300 mb-4">Введіть свій нік для входу в гру</p>
+    <input type="text" id="auth-input" placeholder="Ваш нік TruckBook" class="w-full bg-black/50 border border-blue-500/50 rounded-xl p-3 text-white mb-3 outline-none focus:border-yellow-400" autocomplete="off">
+    <button onclick="login()" class="btn w-full py-3 rounded-xl text-lg">Увійти</button>
+    <div id="auth-error" class="mt-3 text-sm text-red-400 font-bold"></div>
   </div>
 </div>
 
+<!-- ГОЛОВНА -->
 <div id="page-home" class="page active">
-  <h1 class="text-2xl font-bold text-center mb-3 text-yellow-400">Мій Профіль</h1>
-  <div class="card p-5 mb-3">
-    <div class="flex items-center gap-3 mb-4">
-      <img id="my-avatar" class="avatar" src="">
-      <div class="flex-1 min-w-0"><p class="font-bold truncate text-lg" id="my-name">Driver</p><p class="text-xs text-gray-400 truncate" id="my-nick">TruckBook: —</p></div>
-      <button onclick="logout()" class="text-gray-400 text-xs px-3 py-2 border border-gray-700 rounded-lg bg-transparent">Змінити</button>
+  <h1 class="text-3xl font-black text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 drop-shadow-lg">МІЙ ПРОФІЛЬ</h1>
+  <div class="card-glass p-6 mb-4 flex flex-col items-center relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-yellow-400 to-blue-500"></div>
+    <img id="my-avatar" class="w-24 h-24 rounded-full border-4 border-yellow-400 shadow-[0_0_20px_rgba(255,215,0,0.4)] object-cover mb-3" src="">
+    <p class="font-black text-2xl tracking-wide" id="my-name">Завантаження...</p>
+    <p class="text-sm text-blue-300 font-bold" id="my-nick">TruckBook: —</p>
+    <button onclick="logout()" class="absolute top-4 right-4 text-gray-400 hover:text-white bg-white/10 px-3 py-1 rounded-full text-xs border border-white/20 transition">Змінити</button>
+    <div class="w-full grid grid-cols-2 gap-4 mt-6">
+      <div class="bg-black/40 p-4 rounded-2xl border border-yellow-500/30 flex flex-col items-center"><p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Баланс</p><p class="text-3xl font-black text-yellow-400 drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]" id="my-coins">0 HC</p></div>
+      <div class="bg-black/40 p-4 rounded-2xl border border-green-500/30 flex flex-col items-center"><p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Тижневий</p><p class="text-2xl font-black text-green-400" id="my-weekly">0</p></div>
     </div>
-    <div class="grid grid-cols-2 gap-3">
-      <div class="bg-blue-900/40 p-4 rounded-xl border border-blue-700"><p class="text-xs text-gray-400">Баланс</p><p class="text-2xl font-bold text-yellow-400" id="my-coins">0 HC</p></div>
-      <div class="bg-blue-900/40 p-4 rounded-xl border border-blue-700"><p class="text-xs text-gray-400">Тижневий</p><p class="text-xl font-bold text-green-400" id="my-weekly">0</p></div>
-    </div>
+  </div>
+  
+  <div class="card-glass p-5 mb-4">
+    <h3 class="font-bold text-yellow-400 mb-3 border-b border-gray-600 pb-2"><i class="fas fa-truck mr-2"></i>Останні рейси</h3>
+    <div id="my-trips" class="text-sm text-gray-300 space-y-2">Завантаження...</div>
   </div>
 </div>
 
+<!-- ВСІ ІГРИ -->
+<div id="page-games" class="page">
+  <h1 class="text-3xl font-black text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 drop-shadow-lg">ІГРИ</h1>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="card-glass p-4 text-center cursor-pointer transform transition hover:scale-105 active:scale-95" onclick="openGame('blackjack')"><div class="text-5xl mb-2 drop-shadow-lg">♠️</div><p class="font-bold text-sm">Блекджек</p></div>
+    <div class="card-glass p-4 text-center cursor-pointer transform transition hover:scale-105 active:scale-95" onclick="openGame('casino')"><div class="text-5xl mb-2 drop-shadow-lg">🎰</div><p class="font-bold text-sm">Слоти</p></div>
+    <div class="card-glass p-4 text-center cursor-pointer transform transition hover:scale-105 active:scale-95" onclick="openGame('dice')"><div class="text-5xl mb-2 drop-shadow-lg">🎲</div><p class="font-bold text-sm">Кістки</p></div>
+    <div class="card-glass p-4 text-center cursor-pointer transform transition hover:scale-105 active:scale-95" onclick="openGame('mines')"><div class="text-5xl mb-2 drop-shadow-lg">💣</div><p class="font-bold text-sm">Мінне поле</p></div>
+    <div class="card-glass p-4 text-center cursor-pointer transform transition hover:scale-105 active:scale-95" onclick="openGame('roulette')"><div class="text-5xl mb-2 drop-shadow-lg">🎡</div><p class="font-bold text-sm">Рулетка</p></div>
+    <div class="card-glass p-4 text-center cursor-pointer transform transition hover:scale-105 active:scale-95" onclick="openGame('thimbles')"><div class="text-5xl mb-2 drop-shadow-lg">🥛</div><p class="font-bold text-sm">Наперстки</p></div>
+    <div class="card-glass p-4 text-center cursor-pointer transform transition hover:scale-105 active:scale-95" onclick="openGame('rps')"><div class="text-5xl mb-2 drop-shadow-lg">✊</div><p class="font-bold text-sm">РПС</p></div>
+    <div class="card-glass p-4 text-center cursor-pointer transform transition hover:scale-105 active:scale-95" onclick="openGame('checkers')"><div class="text-5xl mb-2 drop-shadow-lg">⚫</div><p class="font-bold text-sm">Шашки</p></div>
+  </div>
+</div>
+
+<!-- МУЛЬТИПЛЕЄР (ЛОББІ) -->
 <div id="page-lobby" class="page">
-  <h1 class="text-2xl font-bold text-center mb-3 text-yellow-400">Грати</h1>
-  <div class="card p-5 mb-3 text-center">
-    <h3 class="font-bold mb-2">Створити кімнату</h3>
-    <input type="number" id="lobby-bet" placeholder="Ставка HC" value="50" class="mb-3">
-    <button onclick="createRoom()" class="btn-blue w-full py-3 rounded-xl mb-4">Створити</button>
-    <hr class="border-gray-600 mb-4">
-    <h3 class="font-bold mb-2">Або зайти за кодом</h3>
-    <input type="number" id="join-code" placeholder="Код кімнати" class="mb-3">
-    <button onclick="joinRoom()" class="btn w-full py-3 rounded-xl">Приєднатися</button>
+  <h1 class="text-3xl font-black text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 drop-shadow-lg">МУЛЬТИПЛЕЄР</h1>
+  <div class="card-glass p-6 text-center">
+    <h3 class="font-bold text-lg mb-3">Створити стіл (Дурень)</h3>
+    <input type="number" id="lobby-bet" placeholder="Ставка HC" value="50" class="w-full bg-black/50 border border-blue-500/50 rounded-xl p-3 text-white mb-4 outline-none text-center text-xl font-bold">
+    <button onclick="createRoom()" class="btn-blue w-full py-4 rounded-xl mb-6">Створити гру</button>
+    <div class="flex items-center justify-center gap-4 mb-6"><div class="h-px bg-gray-600 flex-1"></div><span class="text-gray-400 text-sm">АБО</span><div class="h-px bg-gray-600 flex-1"></div></div>
+    <h3 class="font-bold text-lg mb-3">Приєднатися за кодом</h3>
+    <input type="number" id="join-code" placeholder="Код (4 цифри)" class="w-full bg-black/50 border border-yellow-500/50 rounded-xl p-3 text-white mb-4 outline-none text-center text-xl font-bold tracking-widest">
+    <button onclick="joinRoom()" class="btn w-full py-4 rounded-xl">Зайти в гру</button>
   </div>
 </div>
 
+<!-- ЧЕКАЛЬНЯ (КІМНАТА) -->
 <div id="page-room" class="page">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-bold text-yellow-400" id="room-title">Кімната</h2>
-    <button onclick="leaveRoom()" class="bg-red-600 text-white px-3 py-1 rounded">Вийти</button>
+    <h2 class="text-2xl font-black text-yellow-400" id="room-title">Кімната: 0000</h2>
+    <button onclick="leaveRoom()" class="btn-red px-4 py-2 rounded-lg text-sm">Вийти</button>
   </div>
-  <div class="card p-5 mb-4">
-    <h3 class="font-bold text-center mb-3">Гравці:</h3>
-    <div id="room-players" class="grid grid-cols-2 gap-2"></div>
+  <div class="card-glass p-5 mb-4">
+    <h3 class="font-bold text-center mb-4 text-xl border-b border-gray-600 pb-2">Гравці за столом</h3>
+    <div id="room-players" class="grid grid-cols-2 gap-3"></div>
   </div>
-  <button id="ready-btn" onclick="setReady()" class="btn w-full py-3 rounded-xl">Я готовий</button>
+  <button id="ready-btn" onclick="setReady()" class="btn w-full py-4 rounded-xl text-xl">Я ГОТОВИЙ</button>
 </div>
 
+<!-- ІГРОВИЙ СТІЛ (ДУРЕНЬ) -->
 <div id="page-table" class="page">
-  <div class="text-center mb-2 text-yellow-400 font-bold">Код: <span id="game-room-code"></span> | Козир: <span id="game-trump"></span></div>
-  <div id="table-players" class="flex justify-center gap-4 mb-4"></div>
-  <div class="table-zone mb-4" id="table-cards"></div>
-  <div class="text-center"><p class="text-sm text-gray-400 mb-1">Ваші карти</p><div id="my-cards" class="flex flex-wrap justify-center"></div></div>
+  <div class="flex justify-between text-sm font-bold text-yellow-400 mb-2 px-2"><span>Код: <span id="game-room-code"></span></span><span>Козир: <span id="game-trump" class="text-red-500 text-lg"></span></span></div>
+  <div id="table-players" class="flex justify-center gap-4 mb-2"></div>
+  <div class="durak-table-container">
+      <div class="discard-area"><div class="card-real back" style="transform: rotate(-15deg) scale(0.8)"></div></div>
+      <div class="deck-area"><div class="card-real back" style="transform: rotate(10deg)"></div></div>
+      <div class="table-center" id="table-cards"></div>
+  </div>
+  <div class="text-center mt-3"><div id="my-cards" class="flex flex-wrap justify-center -space-x-4"></div></div>
 </div>
 
+<!-- БАНК -->
 <div id="page-bank" class="page">
-  <h1 class="text-2xl font-bold text-center mb-3 text-yellow-400">Банк</h1>
-  <div class="card p-5">
-    <input type="text" id="tr-recv" placeholder="Discord ID отримувача" class="mb-3">
-    <input type="number" id="tr-amt" placeholder="Сума HC" class="mb-4">
+  <h1 class="text-3xl font-black text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 drop-shadow-lg">БАНК</h1>
+  <div class="card-glass p-6">
+    <h3 class="font-bold mb-3 text-lg">Переказ коїнів</h3>
+    <input type="text" id="tr-recv" placeholder="Discord ID отримувача" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none focus:border-yellow-400">
+    <input type="number" id="tr-amt" placeholder="Сума HC" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-4 outline-none focus:border-yellow-400">
     <button onclick="doTransfer()" class="btn w-full py-3 rounded-xl">Відправити</button>
     <div id="tr-result" class="mt-3 text-center font-bold text-green-400"></div>
   </div>
 </div>
 
+<!-- МОДАЛЬНЕ ВІКНО ГРИ -->
+<div id="game-modal" class="modal-overlay">
+  <div class="modal-box card-glass">
+    <div class="flex justify-between items-center mb-4 border-b border-gray-600 pb-2">
+      <h3 id="game-title" class="text-2xl font-black text-yellow-400"></h3>
+      <button onclick="closeGame()" class="text-gray-400 text-2xl bg-transparent border-0"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="game-body"></div>
+    <div id="game-result" class="mt-4 text-center font-black text-xl min-h-[30px]"></div>
+  </div>
+</div>
+
+<!-- МЕНЮ -->
 <div class="bottom-nav">
   <div class="nav-item active" onclick="switchPage('home',this)"><i class="fas fa-home"></i><span>Головна</span></div>
-  <div class="nav-item" onclick="switchPage('lobby',this)"><i class="fas fa-gamepad"></i><span>Грати</span></div>
+  <div class="nav-item" onclick="switchPage('games',this)"><i class="fas fa-dice"></i><span>Ігри</span></div>
+  <div class="nav-item" onclick="switchPage('lobby',this)"><i class="fas fa-users"></i><span>Мультиплеєр</span></div>
   <div class="nav-item" onclick="switchPage('bank',this)"><i class="fas fa-university"></i><span>Банк</span></div>
 </div>
 
 <script>
-const API = "https://hort-backend.onrender.com"; // ВАШЕ ПОСИЛАННЯ НА RENDER
-const WS_URL = "https://hort-backend.onrender.com"; // ВАШЕ WS ПОСИЛАННЯ
+// ⚠️ ВСТАВ СВОЄ ПОСИЛАННЯ З RENDER
+const API = "https://ВАШ-СЕРВЕР.onrender.com/api"; 
+const WS_URL = "wss://ВАШ-СЕРВЕР.onrender.com/ws"; 
+
 let MY_ID = localStorage.getItem("hort_uid");
 let MY_NICK = localStorage.getItem("hort_nick");
-let currentRoom = null;
-let ws = null;
+let currentGame = null, gameState = null;
+let currentRoom = null, ws = null;
 
 async function login() {
   const v = document.getElementById('auth-input').value.trim();
@@ -123,8 +209,7 @@ async function login() {
     else { document.getElementById('auth-error').textContent = d.detail; }
   } catch(e) { document.getElementById('auth-error').textContent = "Помилка з'єднання"; }
 }
-function logout() { localStorage.removeItem('hort_uid'); location.reload(); }
-
+function logout() { localStorage.removeItem('hort_uid'); localStorage.removeItem('hort_nick'); location.reload(); }
 function switchPage(id, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active'); el.classList.add('active');
@@ -133,29 +218,125 @@ function switchPage(id, el) {
 
 async function loadHome() {
   if (!MY_ID) return;
-  const p = await (await fetch(`${API}/profile/${MY_ID}`)).json();
-  document.getElementById('my-avatar').src = p.avatar;
-  document.getElementById('my-name').textContent = p.discord_name;
-  document.getElementById('my-nick').textContent = 'TruckBook: ' + p.nickname;
-  document.getElementById('my-coins').textContent = p.coins.toLocaleString() + ' HC';
-  document.getElementById('my-weekly').textContent = p.weekly.toLocaleString();
+  try { 
+      const p = await (await fetch(`${API}/profile/${MY_ID}`)).json(); 
+      document.getElementById('my-avatar').src = p.avatar; 
+      document.getElementById('my-name').textContent = p.discord_name; 
+      document.getElementById('my-nick').textContent = 'TruckBook: ' + p.nickname; 
+      document.getElementById('my-coins').textContent = p.coins.toLocaleString() + ' HC'; 
+      document.getElementById('my-weekly').textContent = p.weekly.toLocaleString(); 
+      
+      const trips = await (await fetch(`${API}/trips/${MY_ID}`)).json();
+      if(trips.length) {
+          document.getElementById('my-trips').innerHTML = trips.map(t => `<div class="flex justify-between border-b border-gray-700 pb-1"><span>${t.distance.toLocaleString()} км</span><span class="text-green-400">+${t.reward} HC</span></div>`).join('');
+      } else {
+          document.getElementById('my-trips').innerHTML = '<p class="text-gray-500">Рейсів не знайдено</p>';
+      }
+  } catch(e) {}
 }
 
+// ================= ІГРИ =================
+function cardHtml(c, hidden=false) {
+    if (hidden || c.rank === '?') return `<div class="card-real back card-deal"></div>`;
+    const red = c.suit === '♥' || c.suit === '♦';
+    return `<div class="card-real ${red?'red':'black'} card-deal"><span class="top-suit">${c.rank}<br>${c.suit}</span><span class="bottom-suit">${c.rank}<br>${c.suit}</span></div>`;
+}
+
+const gamesConfig = {
+  blackjack: { title: "♠️ Блекджек", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none text-center text-xl font-bold"><button onclick="playGame('start')" class="btn w-full py-3 rounded-xl">Роздати карти</button>` },
+  casino: { title: "🎰 Слоти", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none text-center text-xl font-bold"><button onclick="playGame()" class="btn w-full py-3 rounded-xl">Крутити</button>` },
+  dice: { title: "🎲 Кістки", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none text-center text-xl font-bold"><div class="flex gap-2"><button onclick="playGame('>7')" class="btn flex-1 py-2">> 7</button><button onclick="playGame('=7')" class="btn flex-1 py-2">= 7</button><button onclick="playGame('<7')" class="btn flex-1 py-2">< 7</button></div>` },
+  mines: { title: "💣 Мінне поле", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none text-center text-xl font-bold"><p class="text-sm text-gray-400 mb-2 text-center">Оберіть клітинку</p><div class="mines-grid mb-4">${[0,1,2,3,4,5,6,7,8].map(i => `<div class="mine-cell" onclick="playGame(${i})"></div>`).join('')}</div>` },
+  roulette: { title: "🎡 Рулетка", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none text-center text-xl font-bold"><input type="number" id="g-num" placeholder="Число (1-13)" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none text-center"><div class="flex gap-2"><button onclick="playGame('red')" class="btn flex-1 py-2 bg-red-600 text-white">Червоне</button><button onclick="playGame('black')" class="btn flex-1 py-2 bg-gray-800 text-white">Чорне</button><button onclick="playGame('number')" class="btn flex-1 py-2">Число</button></div>` },
+  thimbles: { title: "🥛 Наперстки", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none text-center text-xl font-bold"><div class="flex gap-2"><button onclick="playGame(1)" class="btn flex-1 py-2 text-3xl">1</button><button onclick="playGame(2)" class="btn flex-1 py-2 text-3xl">2</button><button onclick="playGame(3)" class="btn flex-1 py-2 text-3xl">3</button></div>` },
+  rps: { title: "✊ РПС", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="w-full bg-black/50 border border-gray-600 rounded-xl p-3 text-white mb-3 outline-none text-center text-xl font-bold"><div class="flex gap-2"><button onclick="playGame('rock')" class="btn flex-1 py-2 text-3xl">✊</button><button onclick="playGame('scissors')" class="btn flex-1 py-2 text-3xl">✌️</button><button onclick="playGame('paper')" class="btn flex-1 py-2 text-3xl">✋</button></div>` },
+  checkers: { title: "⚫ Шашки", action: () => `
+    <div class="checkers-board mb-4">
+        ${Array(64).fill(0).map((_, i) => {
+            const isDark = (Math.floor(i/8) + i%8) % 2 === 1;
+            let piece = '';
+            if (isDark && i < 24) piece = '<div class="checker-piece red"></div>';
+            if (isDark && i > 39) piece = '<div class="checker-piece white"></div>';
+            return `<div class="checker-cell ${isDark?'dark':'light'}">${piece}</div>`;
+        }).join('')}
+    </div>
+    <button class="btn w-full py-3 rounded-xl" onclick="alert('Гра в розробці!')">Зробити хід</button>
+  `}
+};
+
+function openGame(name) {
+  currentGame = name; gameState = null; document.getElementById('game-modal').classList.add('show');
+  document.getElementById('game-result').innerHTML = ''; document.getElementById('game-title').textContent = gamesConfig[name].title;
+  document.getElementById('game-body').innerHTML = gamesConfig[name].action();
+}
+
+async function playGame(action = null, index = 0) {
+  const betEl = document.getElementById('g-bet'); const bet = betEl ? parseInt(betEl.value) : 0;
+  const payload = { user_id: parseInt(MY_ID), bet: bet, action: action, game_data: { ...gameState, card_idx: index } };
+  if (document.getElementById('g-num')) payload.game_data.num = parseInt(document.getElementById('g-num').value);
+
+  try {
+    const r = await fetch(`${API}/game/${currentGame}`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    const d = await r.json();
+    if (!r.ok || d.error) throw new Error(d.detail || d.error);
+    gameState = { ...gameState, ...d }; renderGame(); loadHome();
+  } catch(e) { document.getElementById('game-result').innerHTML = `<span class="text-red-500 text-sm">${e.message}</span>`; }
+}
+
+function renderGame() {
+  const body = document.getElementById('game-body'); const res = document.getElementById('game-result'); res.innerHTML = '';
+  
+  if (currentGame === 'blackjack') {
+    body.innerHTML = `<div class="bj-table"><div class="text-center"><p class="text-gray-300 font-bold mb-2 bg-black/50 inline-block px-3 rounded">Дилер (${gameState.d_score})</p><div class="flex justify-center flex-wrap gap-2">${gameState.d_hand.map(c => cardHtml(c, c.rank === '?')).join('')}</div></div><div class="text-center mt-4"><div class="flex justify-center flex-wrap gap-2">${gameState.p_hand.map(c => cardHtml(c)).join('')}</div><p class="text-yellow-400 font-bold mt-2 bg-black/50 inline-block px-3 rounded">Ви (${gameState.p_score})</p></div></div><div class="flex gap-2 mt-4">${gameState.status === 'playing' ? `<button onclick="playGame('hit')" class="btn-blue flex-1 py-3 rounded-xl text-lg">ВЗЯТИ</button><button onclick="playGame('stand')" class="btn-red flex-1 py-3 rounded-xl text-lg">СТОП</button>` : `<button onclick="openGame('blackjack')" class="btn w-full py-3 rounded-xl">ГРАТИ ЗНОВУ</button>`}</div>`;
+    if (gameState.result) res.innerHTML = gameState.result;
+  }
+  else if (currentGame === 'casino') {
+    body.innerHTML = `<div class="slot-machine-bg"><div class="flex justify-center gap-2 mb-4">${gameState.reels.map(r => `<div class="slot-reel">${r}</div>`).join('')}</div><button onclick="playGame()" class="btn w-full py-3 rounded-xl bg-gradient-to-b from-green-400 to-green-600 text-white border-2 border-white">КРУТИТИ</button></div>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎉 ВИГРАШ: +${gameState.win} HC</span>` : `<span class="text-red-400">📉 ПРОГРАШ: -${gameState.bet} HC</span>`;
+  }
+  else if (currentGame === 'dice') {
+    body.innerHTML = `<div class="flex justify-center gap-6 mb-6"><div class="slot-reel !text-black">${gameState.d1}</div><div class="slot-reel !text-black">${gameState.d2}</div></div><button onclick="openGame('dice')" class="btn w-full py-3 rounded-xl">ГРАТИ ЗНОВУ</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎉 +${gameState.win} HC</span>` : `<span class="text-red-400">📉 -${gameState.bet} HC</span>`;
+  }
+  else if (currentGame === 'mines') {
+    body.innerHTML = `<div class="mines-grid mb-6">${[0,1,2,3,4,5,6,7,8].map(i => { let cls = "mine-cell"; let content = ""; if (gameState.chosen == i) { content = gameState.win > 0 ? "💎" : "💥"; cls += gameState.win > 0 ? " gem" : " bomb"; } else if (gameState.bombs.includes(i)) { content = "💥"; } return `<div class="${cls}">${content}</div>`; }).join('')}</div><button onclick="openGame('mines')" class="btn w-full py-3 rounded-xl">ГРАТИ ЗНОВУ</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">💎 +${gameState.win} HC</span>` : `<span class="text-red-400">💥 -${gameState.bet} HC</span>`;
+  }
+  else if (currentGame === 'rps') {
+    const em = {rock: "✊", scissors: "✌️", paper: "✋"};
+    body.innerHTML = `<div class="flex justify-around items-center mb-6 text-7xl"><div>${em[gameState.user_choice]}</div><div class="text-xl text-gray-500">vs</div><div>${em[gameState.bot_choice]}</div></div><button onclick="openGame('rps')" class="btn w-full py-3 rounded-xl">ГРАТИ ЗНОВУ</button>`;
+    res.innerHTML = gameState.win > gameState.bet ? `<span class="text-green-400">🎉 +${gameState.bet} HC</span>` : (gameState.win === gameState.bet ? `🤝 Нічия` : `<span class="text-red-400">📉 -${gameState.bet} HC</span>`);
+  }
+  else if (currentGame === 'thimbles') {
+    body.innerHTML = `<div class="flex justify-around items-center mb-6 text-7xl">${[1,2,3].map(i => `<div>${gameState.win_cup === i ? "🏆" : "🥛"}</div>`).join('')}</div><button onclick="openGame('thimbles')" class="btn w-full py-3 rounded-xl">ГРАТИ ЗНОВУ</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎯 +${gameState.bet} HC</span>` : `<span class="text-red-400">📉 -${gameState.bet} HC</span>`;
+  }
+  else if (currentGame === 'roulette') {
+    body.innerHTML = `<div class="text-9xl text-center mb-6 font-black ${gameState.color === 'red' ? 'text-red-500 drop-shadow-[0_0_20px_red]' : (gameState.color === 'black' ? 'text-white drop-shadow-[0_0_20px_white]' : 'text-green-500 drop-shadow-[0_0_20px_green]')}">${gameState.number}</div><button onclick="openGame('roulette')" class="btn w-full py-3 rounded-xl">ГРАТИ ЗНОВУ</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎉 +${gameState.win} HC</span>` : `<span class="text-red-400">📉 -${gameState.bet} HC</span>`;
+  }
+}
+function closeGame() { document.getElementById('game-modal').classList.remove('show'); loadHome(); }
+
+// ================= МУЛЬТИПЛЕЄР (ДУРЕНЬ) =================
 async function createRoom() {
   const bet = parseInt(document.getElementById('lobby-bet').value);
-  const r = await fetch(`${API}/create_room`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ host_uid: parseInt(MY_ID), bet: bet }) });
-  const d = await r.json();
-  currentRoom = d.room_id;
-  joinRoomWS();
-  document.getElementById('room-title').textContent = `Кімната ${currentRoom}`;
-  switchPage('room', document.querySelectorAll('.nav-item')[1]);
+  try {
+    const r = await fetch(`${API}/create_room`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ host_uid: parseInt(MY_ID), bet: bet }) });
+    const d = await r.json();
+    currentRoom = d.room_id;
+    joinRoomWS();
+    document.getElementById('room-title').textContent = `Кімната: ${currentRoom}`;
+    switchPage('room', document.querySelectorAll('.nav-item')[2]);
+  } catch(e) { alert("Помилка створення кімнати"); }
 }
 
 function joinRoom() {
   currentRoom = document.getElementById('join-code').value;
+  if(!currentRoom) return;
   joinRoomWS();
-  document.getElementById('room-title').textContent = `Кімната ${currentRoom}`;
-  switchPage('room', document.querySelectorAll('.nav-item')[1]);
+  document.getElementById('room-title').textContent = `Кімната: ${currentRoom}`;
+  switchPage('room', document.querySelectorAll('.nav-item')[2]);
 }
 
 function joinRoomWS() {
@@ -165,29 +346,30 @@ function joinRoomWS() {
     const msg = JSON.parse(event.data);
     if (msg.type === 'room_update') renderRoom(msg.players, msg.host);
     else if (msg.type === 'game_start') renderTable(msg);
+    else if (msg.type === 'error') alert(msg.msg);
   };
 }
 
 function renderRoom(players, host) {
   document.getElementById('room-players').innerHTML = players.map(p => `
-    <div class="card p-2 flex items-center gap-2 ${p.id === host ? 'border-yellow-400' : ''}">
-      <img src="${p.avatar}" class="w-8 h-8 rounded-full">
-      <div><p class="text-sm font-bold">${p.nick}</p><p class="text-xs ${p.ready ? 'text-green-400' : 'text-gray-400'}">${p.ready ? 'Готовий' : 'Чекає'}</p></div>
-    </div>
-  `).join('');
+    <div class="bg-black/40 p-3 rounded-xl border ${p.id === host ? 'border-yellow-400 shadow-[0_0_10px_rgba(255,215,0,0.3)]' : 'border-gray-600'} flex items-center gap-2">
+      <img src="${p.avatar}" class="w-10 h-10 rounded-full border-2 border-white"><div class="overflow-hidden"><p class="text-sm font-bold truncate">${p.nick}</p><p class="text-xs ${p.ready ? 'text-green-400' : 'text-gray-400'}">${p.ready ? '✔ Готовий' : '⏳ Чекає'}</p></div>
+    </div>`).join('');
 }
 
 function setReady() { if (ws) ws.send(JSON.stringify({ type: 'ready' })); }
-function leaveRoom() { if (ws) ws.close(); switchPage('lobby', document.querySelectorAll('.nav-item')[1]); }
+function leaveRoom() { if (ws) ws.close(); switchPage('lobby', document.querySelectorAll('.nav-item')[2]); }
 
 function renderTable(msg) {
-  switchPage('table');
+  switchPage('table', document.querySelectorAll('.nav-item')[2]);
   document.getElementById('game-room-code').textContent = currentRoom;
   document.getElementById('game-trump').textContent = msg.trump;
   document.getElementById('table-players').innerHTML = msg.players.filter(p => p.id !== parseInt(MY_ID)).map(p => `
-    <div class="text-center"><img src="${p.avatar}" class="w-10 h-10 mx-auto rounded-full border border-gray-600"><p class="text-xs mt-1">${p.nick} (${p.cards_count})</p></div>
+    <div class="text-center"><img src="${p.avatar}" class="w-12 h-12 mx-auto rounded-full border-2 border-gray-600"><p class="text-xs font-bold mt-1">${p.nick}</p><p class="text-xs text-gray-400">(${p.cards_count} карт)</p></div>
   `).join('');
-  document.getElementById('my-cards').innerHTML = msg.my_hand.map(c => `<div class="playing-card ${c.suit === '♥' || c.suit === '♦' ? 'red' : ''}"><span>${c.rank}<br>${c.suit}</span></div>`).join('');
+  let tableHtml = msg.table.map((t, idx) => `<div class="table-card-wrapper">${cardHtml(t.attack)}${t.defend ? `<div style="position:absolute; top:10px; left:10px;">${cardHtml(t.defend)}</div>` : ''}</div>`).join('');
+  document.getElementById('table-cards').innerHTML = tableHtml;
+  document.getElementById('my-cards').innerHTML = msg.my_hand.map((c, i) => `<div class="transform transition hover:-translate-y-4 hover:z-50 cursor-pointer" onclick="alert('Логіка ходу в розробці')">${cardHtml(c)}</div>`).join('');
 }
 
 async function doTransfer() {
@@ -195,6 +377,7 @@ async function doTransfer() {
   const r = await fetch(`${API}/transfer`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ sender_id: parseInt(MY_ID), receiver_id: parseInt(document.getElementById('tr-recv').value), amount: parseInt(document.getElementById('tr-amt').value) }) });
   const d = await r.json();
   res.innerHTML = r.ok ? `<span class="text-green-400">${d.message}</span>` : `<span class="text-red-500">${d.detail}</span>`;
+  loadHome();
 }
 
 if (MY_ID) { document.getElementById('auth-modal').classList.remove('show'); loadHome(); }
