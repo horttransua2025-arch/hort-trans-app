@@ -282,7 +282,8 @@ input:focus{border-color:var(--violet)}
 <script>
 'use strict';
 /* ================= УТИЛІТИ ================= */
-const API_BASE = "https://hort-backend.onrender.com/api"; // ⚠️ ВСТАВ СВОЄ ПОСИЛАННЯ НА RENDER
+// ТУТ ВЖЕ ВПИСАНО ТВОЄ ПОСИЛАННЯ
+const API_BASE = "https://hort-backend.onrender.com/api"; 
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const rand=n=>Math.floor(Math.random()*n);
@@ -697,6 +698,9 @@ function showLogin(){
 }
 async function login(nick){
   nick=(nick||'').trim().slice(0,20);if(nick.length<2){$('#login-err').textContent='Мінімум 2 символи';return}
+  $('#login-err').textContent='Зачекайте, сервер прокидається (до 50 сек)...';
+  $('#login-err').style.color='var(--gold)';
+  
   try {
       const res = await fetch(`${API_BASE}/login`, {
           method: 'POST',
@@ -716,11 +720,16 @@ async function login(nick){
           S.streak = 0;
           LS.set('hc_nick', S.nick);
           $('#login').style.display='none';
+          $('#login-err').style.color='var(--red)';
           enterApp();
       } else {
           $('#login-err').textContent = data.detail || 'Помилка';
+          $('#login-err').style.color='var(--red)';
       }
-  } catch(e) { $('#login-err').textContent = 'Сервер недоступний'; }
+  } catch(e) { 
+      $('#login-err').textContent = 'Сервер недоступний. Спробуйте ще раз.';
+      $('#login-err').style.color='var(--red)';
+  }
 }
 function enterApp(){
   $('#u-av').src=avatar(S.nick);$('#u-name').textContent=S.nick;$('#u-sub').textContent='TruckBook: '+S.nick;
