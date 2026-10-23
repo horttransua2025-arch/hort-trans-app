@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0A192F">
 <title>HORT TRANS</title>
+
+<!-- ПІДКЛЮЧЕННЯ ДЛЯ ДОДАТКУ -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="https://i.ibb.co/s9hCHsQB/7d812568-b15c-40a4-b21e-2630a1a60ecb.png">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -36,7 +41,7 @@ input:focus, select:focus { border-color: #FFD700 !important; }
 </head>
 <body class="p-4">
 
-<!-- АВТОРИЗАЦІЯ (ЗА НІКОМ TRUCKBOOK) -->
+<!-- АВТОРИЗАЦІЯ -->
 <div id="auth-modal" class="modal-overlay show">
   <div class="modal-box text-center">
     <img src="https://i.ibb.co/s9hCHsQB/7d812568-b15c-40a4-b21e-2630a1a60ecb.png" class="w-24 mx-auto rounded-full mb-4 shadow-lg">
@@ -167,14 +172,16 @@ input:focus, select:focus { border-color: #FFD700 !important; }
 </div>
 
 <script>
-const API = "https://hort-backend.onrender.com/api";   // ⚠️ ЗМІНІТЬ, якщо бекенд не локальний
+// ⚠️ ОБОВ'ЯЗКОВО ЗМІНІТЬ ЦЕ ПОСИЛАННЯ НА ВАШ СЕРВЕР З BOT-HOSTING!
+const API = "https://prem-eu3.bot-hosting.net:8080/api"; 
+
 let MY_ID = localStorage.getItem("hort_uid");
 let MY_NICK = localStorage.getItem("hort_nick");
 let allDrivers = [];
 let currentGame = null;
 let pickedValue = null;
 
-// ==================== АВТОРИЗАЦІЯ ЗА НІКОМ ====================
+// ==================== АВТОРИЗАЦІЯ ====================
 async function login() {
   const v = document.getElementById('auth-input').value.trim();
   const err = document.getElementById('auth-error');
@@ -199,7 +206,7 @@ async function login() {
     document.getElementById('auth-modal').classList.remove('show');
     init();
   } catch (e) {
-    err.textContent = "Помилка зєднання з сервером";
+    err.textContent = "Помилка з'єднання з сервером";
   }
 }
 
@@ -495,6 +502,13 @@ async function autoLogin() {
 }
 
 if (MY_ID) autoLogin();
+
+// РЕЄСТРАЦІЯ SERVICE WORKER
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js');
+  });
+}
 </script>
 </body>
 </html>
