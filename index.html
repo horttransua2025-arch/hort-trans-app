@@ -9,36 +9,50 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-body { background: #0A192F; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 70px; }
-.card { background: linear-gradient(145deg, #112240, #0A192F); border: 1px solid #1E3A8A; border-radius: 16px; }
-.btn { background: linear-gradient(90deg, #FFD700, #FFA500); color: #0A192F; font-weight: bold; border: none; cursor: pointer; }
-.btn:active { transform: scale(.96); }
-.btn-blue { background: linear-gradient(90deg, #00BFFF, #0057B7); color: #fff; font-weight: bold; border: none; cursor: pointer; }
+body { background: #0A192F; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding-bottom: 70px; overflow-x: hidden; }
+.card { background: linear-gradient(145deg, #112240, #0A192F); border: 1px solid #1E3A8A; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: transform 0.2s, box-shadow 0.2s; }
+.game-card:active { transform: scale(0.95); box-shadow: 0 0 15px #00BFFF; }
+.btn { background: linear-gradient(90deg, #FFD700, #FFA500); color: #0A192F; font-weight: bold; border: none; cursor: pointer; transition: transform 0.1s; }
+.btn:active { transform: scale(0.95); }
+.btn-blue { background: linear-gradient(90deg, #00BFFF, #0057B7); color: #fff; font-weight: bold; border: none; cursor: pointer; transition: transform 0.1s; }
+.btn-blue:active { transform: scale(0.95); }
 .btn-red { background: linear-gradient(90deg, #ff4b4b, #cc0000); color: #fff; font-weight: bold; border: none; cursor: pointer; }
-.bottom-nav { background: #112240; border-top: 1px solid #1E3A8A; position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; }
-.nav-item { color: #8892B0; display: flex; flex-direction: column; align-items: center; font-size: 11px; flex: 1; cursor: pointer; }
-.nav-item.active { color: #FFD700; }
+.bottom-nav { background: rgba(17, 34, 64, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #1E3A8A; position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; }
+.nav-item { color: #8892B0; display: flex; flex-direction: column; align-items: center; font-size: 11px; flex: 1; cursor: pointer; transition: color 0.3s; }
+.nav-item.active { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
 .nav-item i { font-size: 18px; margin-bottom: 2px; }
-.page { display: none; } .page.active { display: block; animation: fadeIn .3s; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to {opacity:1; transform:translateY(0);} }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; z-index: 200; align-items: flex-end; }
+.page { display: none; } .page.active { display: block; animation: fadeIn .4s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px);} to {opacity:1; transform:translateY(0);} }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; z-index: 200; align-items: flex-end; backdrop-filter: blur(5px); }
 .modal-overlay.show { display: flex; }
-.modal-box { background: #112240; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 20px 20px 0 0; padding: 20px; border-top: 2px solid #00BFFF; }
-input, select { background: #0A192F !important; border: 1px solid #1E3A8A !important; color: #fff !important; border-radius: 10px; padding: 12px; width: 100%; outline: none; }
+.modal-box { background: linear-gradient(180deg, #112240, #0A192F); width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 24px 24px 0 0; padding: 20px; border-top: 2px solid #00BFFF; animation: slideUp 0.3s ease-out; }
+@keyframes slideUp { from { transform: translateY(100%);} to {transform: translateY(0);} }
+input, select { background: #0A192F !important; border: 1px solid #1E3A8A !important; color: #fff !important; border-radius: 10px; padding: 12px; width: 100%; outline: none; transition: border 0.3s; }
+input:focus { border-color: #00BFFF !important; box-shadow: 0 0 10px rgba(0, 191, 255, 0.3); }
 
 /* АВАТАРКИ */
-.avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700; background: #1E3A8A; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
 
 /* КАРТИ ТА ІГРИ */
-.playing-card { width: 50px; height: 75px; background: #fff; border-radius: 6px; color: #000; display: inline-flex; flex-direction: column; justify-content: space-between; padding: 4px; font-weight: bold; font-size: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); margin: 2px; cursor: pointer; transition: transform 0.2s; }
-.playing-card:hover { transform: translateY(-5px); }
+.playing-card { width: 55px; height: 80px; background: #fff; border-radius: 8px; color: #000; display: inline-flex; flex-direction: column; justify-content: space-between; padding: 5px; font-weight: bold; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.6); margin: 2px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; animation: dealCard 0.3s ease-out; }
+@keyframes dealCard { from { transform: translateY(-50px) rotate(10deg); opacity: 0; } to { transform: translateY(0) rotate(0); opacity: 1; } }
+.playing-card:hover { transform: translateY(-8px); box-shadow: 0 0 15px #00BFFF; }
 .playing-card.red { color: #d32f2f; }
 .playing-card.back { background: repeating-linear-gradient(45deg, #1E3A8A, #1E3A8A 5px, #0A192F 5px, #0A192F 10px); border: 2px solid #fff; cursor: default; }
-.card-container { display: flex; flex-wrap: wrap; justify-content: center; min-height: 80px; }
-.slot-reel { font-size: 40px; background: #fff; color: black; border-radius: 10px; width: 60px; height: 80px; display: flex; align-items: center; justify-content: center; }
-.mines-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 250px; margin: 0 auto; }
-.mine-cell { background: #1E3A8A; height: 60px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; border: 1px solid #00BFFF; }
-.mine-cell.bomb { background: #d32f2f; } .mine-cell.gem { background: #4CAF50; }
+.card-container { display: flex; flex-wrap: wrap; justify-content: center; min-height: 85px; }
+
+.slot-reel { font-size: 45px; background: linear-gradient(180deg, #fff, #ccc); color: black; border-radius: 12px; width: 70px; height: 90px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); animation: spin 0.5s ease-out; }
+@keyframes spin { from { transform: rotateX(90deg); } to { transform: rotateX(0); } }
+
+.dice-box { width: 70px; height: 70px; background: #fff; color: #000; font-size: 45px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-weight: bold; box-shadow: 0 5px 0 #ccc; animation: rollDice 0.5s ease-out; }
+@keyframes rollDice { from { transform: rotate(180deg) scale(0.5); opacity: 0; } to { transform: rotate(0) scale(1); opacity: 1; } }
+
+.mines-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 280px; margin: 0 auto; }
+.mine-cell { background: #1E3A8A; height: 70px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; border: 1px solid #00BFFF; transition: background 0.3s; }
+.mine-cell.bomb { background: #d32f2f; animation: shake 0.4s; }
+.mine-cell.gem { background: #4CAF50; animation: pop 0.4s; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+@keyframes pop { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
 </style>
 </head>
 <body class="p-4">
@@ -46,9 +60,10 @@ input, select { background: #0A192F !important; border: 1px solid #1E3A8A !impor
 <!-- АВТОРИЗАЦІЯ -->
 <div id="auth-modal" class="modal-overlay show">
   <div class="modal-box text-center">
-    <h2 class="text-xl font-bold text-yellow-400 mb-2">HORT TRANS</h2>
+    <h2 class="text-2xl font-bold text-yellow-400 mb-2">HORT TRANS</h2>
+    <p class="text-sm text-gray-400 mb-4">Введіть свій нік</p>
     <input type="text" id="auth-input" placeholder="Ваш нік TruckBook" class="mb-3" autocomplete="off">
-    <button onclick="login()" class="btn w-full py-3 rounded-xl">Увійти</button>
+    <button onclick="login()" class="btn w-full py-3 rounded-xl text-lg">Увійти</button>
     <div id="auth-error" class="mt-3 text-sm text-red-500"></div>
   </div>
 </div>
@@ -72,14 +87,14 @@ input, select { background: #0A192F !important; border: 1px solid #1E3A8A !impor
     <div class="flex items-center gap-3 mb-4">
       <img id="my-avatar" class="avatar" src="">
       <div class="flex-1 min-w-0">
-        <p class="font-bold truncate" id="my-name">Driver</p>
+        <p class="font-bold truncate text-lg" id="my-name">Driver</p>
         <p class="text-xs text-gray-400 truncate" id="my-nick">TruckBook: —</p>
       </div>
-      <button onclick="logout()" class="text-gray-500 text-xs px-2 py-1 border border-gray-700 rounded bg-transparent">Змінити</button>
+      <button onclick="logout()" class="text-gray-400 text-xs px-3 py-2 border border-gray-700 rounded-lg bg-transparent hover:bg-gray-800">Змінити</button>
     </div>
-    <div class="grid grid-cols-2 gap-2">
-      <div class="bg-blue-900/40 p-3 rounded-lg border border-blue-700"><p class="text-xs text-gray-400">Баланс</p><p class="text-xl font-bold text-yellow-400" id="my-coins">0 HC</p></div>
-      <div class="bg-blue-900/40 p-3 rounded-lg border border-blue-700"><p class="text-xs text-gray-400">Тижневий</p><p class="text-lg font-bold text-green-400" id="my-weekly">0</p></div>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-blue-900/40 p-4 rounded-xl border border-blue-700"><p class="text-xs text-gray-400">Баланс</p><p class="text-2xl font-bold text-yellow-400" id="my-coins">0 HC</p></div>
+      <div class="bg-blue-900/40 p-4 rounded-xl border border-blue-700"><p class="text-xs text-gray-400">Тижневий</p><p class="text-xl font-bold text-green-400" id="my-weekly">0</p></div>
     </div>
   </div>
 </div>
@@ -87,20 +102,26 @@ input, select { background: #0A192F !important; border: 1px solid #1E3A8A !impor
 <!-- ВОДІЇ -->
 <div id="page-drivers" class="page">
   <h1 class="text-2xl font-bold text-center mb-3 text-yellow-400">Водії компанії</h1>
-  <input type="text" id="search-driver" placeholder="🔍 Пошук..." oninput="filterDrivers()" class="mb-3">
+  <input type="text" id="search-driver" placeholder="🔍 Пошук..." oninput="filterDrivers()" class="mb-4">
   <div id="drivers-list"></div>
 </div>
 
 <!-- ІГРИ -->
 <div id="page-games" class="page">
-  <h1 class="text-2xl font-bold text-center mb-3 text-yellow-400">Ігри</h1>
+  <h1 class="text-2xl font-bold text-center mb-4 text-yellow-400">Ігри</h1>
   <div class="grid grid-cols-2 gap-3 text-center">
-    <div class="card p-3" onclick="openGame('durak')"><div class="text-3xl mb-1">🃏</div><p class="text-sm font-bold">Дурень</p></div>
-    <div class="card p-3" onclick="openGame('blackjack')"><div class="text-3xl mb-1">♠️</div><p class="text-sm font-bold">Блекджек</p></div>
-    <div class="card p-3" onclick="openGame('casino')"><div class="text-3xl mb-1">🎰</div><p class="text-sm font-bold">Слоти</p></div>
-    <div class="card p-3" onclick="openGame('dice')"><div class="text-3xl mb-1">🎲</div><p class="text-sm font-bold">Кістки</p></div>
-    <div class="card p-3" onclick="openGame('mines')"><div class="text-3xl mb-1">💣</div><p class="text-sm font-bold">Мінне поле</p></div>
-    <div class="card p-3" onclick="openGame('rps')"><div class="text-3xl mb-1">✊</div><p class="text-sm font-bold">РПС</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('durak')"><div class="text-4xl mb-2">🃏</div><p class="font-bold">Дурень</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('blackjack')"><div class="text-4xl mb-2">♠️</div><p class="font-bold">Блекджек</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('casino')"><div class="text-4xl mb-2">🎰</div><p class="font-bold">Слоти</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('dice')"><div class="text-4xl mb-2">🎲</div><p class="font-bold">Кістки</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('mines')"><div class="text-4xl mb-2">💣</div><p class="font-bold">Мінне поле</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('roulette')"><div class="text-4xl mb-2">🎡</div><p class="font-bold">Рулетка</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('wheel')"><div class="text-4xl mb-2">🛞</div><p class="font-bold">Колесо</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('thimbles')"><div class="text-4xl mb-2">🥛</div><p class="font-bold">Наперстки</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('double')"><div class="text-4xl mb-2">🪙</div><p class="font-bold">Монетка</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('russian')"><div class="text-4xl mb-2">🔫</div><p class="font-bold">Російська</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('smuggler')"><div class="text-4xl mb-2">🚚</div><p class="font-bold">Контрабанда</p></div>
+    <div class="card p-4 game-card cursor-pointer" onclick="openGame('rps')"><div class="text-4xl mb-2">✊</div><p class="font-bold">РПС</p></div>
   </div>
 </div>
 
@@ -108,10 +129,10 @@ input, select { background: #0A192F !important; border: 1px solid #1E3A8A !impor
 <div id="page-bank" class="page">
   <h1 class="text-2xl font-bold text-center mb-3 text-yellow-400">Банк</h1>
   <div class="card p-5">
-    <input type="text" id="tr-recv" placeholder="Discord ID отримувача" class="mb-2">
-    <input type="number" id="tr-amt" placeholder="Сума HC" class="mb-3">
+    <input type="text" id="tr-recv" placeholder="Discord ID отримувача" class="mb-3">
+    <input type="number" id="tr-amt" placeholder="Сума HC" class="mb-4">
     <button onclick="doTransfer()" class="btn w-full py-3 rounded-xl">Відправити</button>
-    <div id="tr-result" class="mt-3 text-center text-sm font-bold text-green-400"></div>
+    <div id="tr-result" class="mt-3 text-center font-bold text-green-400"></div>
   </div>
 </div>
 
@@ -124,16 +145,20 @@ input, select { background: #0A192F !important; border: 1px solid #1E3A8A !impor
 </div>
 
 <script>
-const API = "https://hort-proxy.horttransua2025.workers.dev/api"; 
+const API = "https://hort-proxy.horttransua2025.workers.dev/api"; // ВАШЕ ПОСИЛАННЯ CLOUDFLARE
 let MY_ID = localStorage.getItem("hort_uid");
 let allDrivers = [], currentGame = null, gameState = null;
 
 async function login() {
   const v = document.getElementById('auth-input').value.trim();
-  const r = await fetch(`${API}/login`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ nick: v }) });
-  const d = await r.json();
-  if (r.ok) { MY_ID = String(d.user_id); localStorage.setItem('hort_uid', MY_ID); document.getElementById('auth-modal').classList.remove('show'); loadHome(); }
-  else { document.getElementById('auth-error').textContent = d.detail; }
+  const err = document.getElementById('auth-error');
+  err.textContent = 'Зачекайте...';
+  try {
+    const r = await fetch(`${API}/login`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ nick: v }) });
+    const d = await r.json();
+    if (r.ok) { MY_ID = String(d.user_id); localStorage.setItem('hort_uid', MY_ID); document.getElementById('auth-modal').classList.remove('show'); loadHome(); }
+    else { err.textContent = d.detail; }
+  } catch(e) { err.textContent = "Помилка з'єднання з сервером"; }
 }
 function logout() { localStorage.removeItem('hort_uid'); location.reload(); }
 function switchPage(id, el) {
@@ -144,11 +169,14 @@ function switchPage(id, el) {
 
 async function loadHome() {
   if (!MY_ID) return;
-  const p = await (await fetch(`${API}/profile/${MY_ID}`)).json();
-  document.getElementById('my-avatar').src = p.avatar;
-  document.getElementById('my-name').textContent = p.discord_name;
-  document.getElementById('my-nick').textContent = 'TruckBook: ' + p.nickname;
-  document.getElementById('my-coins').textContent = p.coins.toLocaleString() + ' HC';
+  try {
+    const p = await (await fetch(`${API}/profile/${MY_ID}`)).json();
+    document.getElementById('my-avatar').src = p.avatar;
+    document.getElementById('my-name').textContent = p.discord_name;
+    document.getElementById('my-nick').textContent = 'TruckBook: ' + p.nickname;
+    document.getElementById('my-coins').textContent = p.coins.toLocaleString() + ' HC';
+    document.getElementById('my-weekly').textContent = p.weekly.toLocaleString();
+  } catch(e) {}
 }
 
 async function loadDrivers() {
@@ -157,19 +185,21 @@ async function loadDrivers() {
 function filterDrivers() { renderDrivers(allDrivers.filter(d => d.name.toLowerCase().includes(document.getElementById('search-driver').value.toLowerCase()))); }
 function renderDrivers(list) {
   document.getElementById('drivers-list').innerHTML = list.map(d => `
-    <div class="card p-3 mb-2 flex items-center gap-3">
-      <img src="${d.avatar}" class="avatar" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
-      <div class="flex-1 min-w-0"><p class="font-bold truncate">${d.name}</p><p class="text-xs text-gray-400">${d.distance.toLocaleString()} км</p></div>
-      <div class="text-right"><p class="text-yellow-400 font-bold">${d.coins.toLocaleString()}</p></div>
+    <div class="card p-4 mb-3 flex items-center gap-4">
+      <img src="${d.avatar}" class="avatar">
+      <div class="flex-1 min-w-0"><p class="font-bold text-lg truncate">${d.name}</p><p class="text-xs text-gray-400">${d.distance.toLocaleString()} км</p></div>
+      <div class="text-right"><p class="text-yellow-400 font-bold text-lg">${d.coins.toLocaleString()}</p></div>
     </div>`).join('');
 }
 
 async function doTransfer() {
   const res = document.getElementById('tr-result');
-  const r = await fetch(`${API}/transfer`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ sender_id: parseInt(MY_ID), receiver_id: parseInt(document.getElementById('tr-recv').value), amount: parseInt(document.getElementById('tr-amt').value) }) });
-  const d = await r.json();
-  res.innerHTML = r.ok ? `<span class="text-green-400">${d.message}</span>` : `<span class="text-red-500">${d.detail}</span>`;
-  loadHome();
+  try {
+    const r = await fetch(`${API}/transfer`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ sender_id: parseInt(MY_ID), receiver_id: parseInt(document.getElementById('tr-recv').value), amount: parseInt(document.getElementById('tr-amt').value) }) });
+    const d = await r.json();
+    res.innerHTML = r.ok ? `<span class="text-green-400">${d.message}</span>` : `<span class="text-red-500">${d.detail}</span>`;
+    loadHome();
+  } catch(e) { res.innerHTML = `<span class="text-red-500">Помилка</span>`; }
 }
 
 function cardHtml(c, hidden=false) {
@@ -181,14 +211,20 @@ function cardHtml(c, hidden=false) {
 const gamesConfig = {
   durak: { title: "🃏 Дурень", action: () => `
     <input type="number" id="g-bet" placeholder="Ставка HC" value="50" class="mb-3">
-    <select id="d-bots" class="mb-3"><option value="1">1 Суперник</option><option value="2">2 Суперники</option><option value="3">3 Суперники</option></select>
+    <select id="d-bots" class="mb-3"><option value="1">1 Суперник</option></select>
     <select id="d-rule" class="mb-3"><option value="podkidnoy">Підкидний</option><option value="perevodnoy">Переводний</option></select>
     <button onclick="playGame('start')" class="btn w-full py-3 rounded-xl">Почати</button>
   `},
   blackjack: { title: "♠️ Блекджек", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><button onclick="playGame('start')" class="btn w-full py-3 rounded-xl">Роздати</button>` },
   casino: { title: "🎰 Слоти", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><button onclick="playGame()" class="btn w-full py-3 rounded-xl">Крутити</button>` },
   dice: { title: "🎲 Кістки", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><div class="flex gap-2"><button onclick="playGame('>7')" class="btn flex-1 py-2">Більше 7</button><button onclick="playGame('=7')" class="btn flex-1 py-2">Рівно 7</button><button onclick="playGame('<7')" class="btn flex-1 py-2">Менше 7</button></div>` },
-  mines: { title: "💣 Мінне поле", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><button onclick="playGame()" class="btn w-full py-3 rounded-xl">Грати</button>` },
+  mines: { title: "💣 Мінне поле", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><p class="text-sm text-gray-400 mb-2">Оберіть клітинку</p><div class="mines-grid mb-4">${[0,1,2,3,4,5,6,7,8].map(i => `<div class="mine-cell" onclick="playGame(${i})"></div>`).join('')}</div>` },
+  roulette: { title: "🎡 Рулетка", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><input type="number" id="g-num" placeholder="Число (1-13)" class="mb-3"><div class="flex gap-2"><button onclick="playGame('red')" class="btn flex-1 py-2 bg-red-600 text-white">Червоне</button><button onclick="playGame('black')" class="btn flex-1 py-2 bg-gray-800 text-white">Чорне</button><button onclick="playGame('number')" class="btn flex-1 py-2">Число</button></div>` },
+  wheel: { title: "🛞 Колесо", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><button onclick="playGame()" class="btn w-full py-3 rounded-xl">Крутити</button>` },
+  thimbles: { title: "🥛 Наперстки", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><div class="flex gap-2"><button onclick="playGame(1)" class="btn flex-1 py-2">1</button><button onclick="playGame(2)" class="btn flex-1 py-2">2</button><button onclick="playGame(3)" class="btn flex-1 py-2">3</button></div>` },
+  double: { title: "🪙 Монетка", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><div class="flex gap-2"><button onclick="playGame('heads')" class="btn flex-1 py-2">Орел</button><button onclick="playGame('tails')" class="btn flex-1 py-2">Решка</button></div>` },
+  russian: { title: "🔫 Російська", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><button onclick="playGame()" class="btn w-full py-3 rounded-xl">Крутити</button>` },
+  smuggler: { title: "🚚 Контрабанда", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><div class="flex gap-2"><button onclick="playGame('safe')" class="btn flex-1 py-2">Безпечно</button><button onclick="playGame('risky')" class="btn flex-1 py-2">Ризик</button></div>` },
   rps: { title: "✊ РПС", action: () => `<input type="number" id="g-bet" placeholder="Ставка" value="50" class="mb-3"><div class="flex gap-2"><button onclick="playGame('rock')" class="btn flex-1 py-2">✊</button><button onclick="playGame('scissors')" class="btn flex-1 py-2">✌️</button><button onclick="playGame('paper')" class="btn flex-1 py-2">✋</button></div>` }
 };
 
@@ -201,11 +237,7 @@ function openGame(name) {
 async function playGame(action = null, index = 0) {
   const betEl = document.getElementById('g-bet'); const bet = betEl ? parseInt(betEl.value) : 0;
   const payload = { user_id: parseInt(MY_ID), bet: bet, action: action, game_data: { ...gameState, card_idx: index } };
-  
-  if (currentGame === 'durak' && action === 'start') {
-      payload.game_data.bots_count = parseInt(document.getElementById('d-bots').value);
-      payload.game_data.rule = document.getElementById('d-rule').value;
-  }
+  if (document.getElementById('g-num')) payload.game_data.num = parseInt(document.getElementById('g-num').value);
 
   try {
     const r = await fetch(`${API}/game/${currentGame}`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
@@ -219,44 +251,68 @@ function renderGame() {
   const body = document.getElementById('game-body'); const res = document.getElementById('game-result'); res.innerHTML = '';
   
   if (currentGame === 'durak' && gameState.status === 'playing') {
-      let botHtml = gameState.bots.map((b, i) => `<div class="text-center mb-1"><p class="text-xs text-gray-400">Бот ${i+1} (${b.hand.length})</p><div>${b.hand.map(() => '<div class="playing-card back" style="width:20px;height:30px"></div>').join('')}</div></div>`).join('');
-      let tableHtml = gameState.table.map((t, idx) => `<div class="flex gap-1 ${gameState.turn === 'player_defend' && idx === gameState.table.length-1 ? 'border-2 border-red-500 rounded p-1' : ''}">${cardHtml(t.attack)}${t.defend ? cardHtml(t.defend) : '<div class="playing-card border border-dashed border-gray-500 bg-transparent"></div>'}</div>`).join('');
-      
+      let botHtml = `<div class="text-center mb-2"><p class="text-xs text-gray-400">Суперник (${gameState.d_hand.length})</p><div>${gameState.d_hand.map(() => '<div class="playing-card back" style="width:30px;height:45px"></div>').join('')}</div></div>`;
+      let tableHtml = gameState.table.map((t, idx) => `<div class="flex gap-1 ${gameState.turn === 'player_defend' && idx === gameState.table.length-1 ? 'border-2 border-red-500 rounded p-1 shadow-lg shadow-red-500/50' : ''}">${cardHtml(t.attack)}${t.defend ? cardHtml(t.defend) : '<div class="playing-card border border-dashed border-gray-500 bg-transparent"></div>'}</div>`).join('');
       let myCards = gameState.p_hand.map((c, i) => `<div onclick="${gameState.turn === 'player' ? `playGame('player_attack', ${i})` : `playGame('player_defend', ${i})`}">${cardHtml(c)}</div>`).join('');
 
       body.innerHTML = `
-          <div class="text-sm text-center text-yellow-400 mb-2">Козир: ${gameState.trump} | Колода: ${gameState.deck_count}</div>
-          <div class="mb-2">${botHtml}</div>
-          <div class="bg-green-900/30 border border-green-700 rounded-xl p-4 min-h-[100px] flex flex-wrap gap-2 mb-4">${tableHtml || 'Стіл порожній'}</div>
-          <div class="text-center"><p class="text-sm text-gray-400 mb-1">Ваші карти (натисніть)</p><div class="card-container">${myCards}</div></div>
+          <div class="text-sm text-center text-yellow-400 mb-2 font-bold bg-blue-900/50 py-1 rounded">Козир: ${gameState.trump} | Колода: ${gameState.deck_count}</div>
+          ${botHtml}
+          <div class="bg-green-900/20 border border-green-700/50 rounded-xl p-4 min-h-[120px] flex flex-wrap gap-2 mb-4 items-center justify-center">${tableHtml || 'Стіл порожній'}</div>
+          <div class="text-center"><p class="text-sm text-gray-400 mb-2">Ваші карти</p><div class="card-container">${myCards}</div></div>
           <div class="flex gap-2 mt-4">
-            ${gameState.turn === 'player' ? `<button onclick="playGame('end_turn')" class="btn-blue w-full py-2 rounded-xl">Бито</button>` : ''}
-            ${gameState.turn === 'player_defend' ? `<button onclick="playGame('player_take')" class="btn-red w-full py-2 rounded-xl">Забрати карти</button>` : ''}
+            ${gameState.turn === 'player' ? `<button onclick="playGame('end_turn')" class="btn-blue w-full py-3 rounded-xl">Бито</button>` : ''}
+            ${gameState.turn === 'player_defend' ? `<button onclick="playGame('player_take')" class="btn-red w-full py-3 rounded-xl">Забрати карти</button>` : ''}
           </div>
       `;
   }
   else if (currentGame === 'blackjack') {
-    body.innerHTML = `<div class="mb-3 text-center"><p class="text-gray-400">Дилер (${gameState.d_score})</p><div class="card-container">${gameState.d_hand.map(c => cardHtml(c, c.rank === '?')).join('')}</div></div>
-    <div class="mb-3 text-center"><p class="text-gray-400">Ви (${gameState.p_score})</p><div class="card-container">${gameState.p_hand.map(c => cardHtml(c)).join('')}</div></div>
-    <div class="flex gap-2">${gameState.status === 'playing' ? `<button onclick="playGame('hit')" class="btn-blue flex-1 py-2">Взяти</button><button onclick="playGame('stand')" class="btn flex-1 py-2">Стоп</button>` : `<button onclick="openGame('blackjack')" class="btn w-full py-2">Грати знову</button>`}</div>`;
+    body.innerHTML = `<div class="mb-4 text-center"><p class="text-gray-400 font-bold mb-2">Дилер (${gameState.d_score})</p><div class="card-container">${gameState.d_hand.map(c => cardHtml(c, c.rank === '?')).join('')}</div></div>
+    <div class="mb-4 text-center"><p class="text-gray-400 font-bold mb-2">Ви (${gameState.p_score})</p><div class="card-container">${gameState.p_hand.map(c => cardHtml(c)).join('')}</div></div>
+    <div class="flex gap-2">${gameState.status === 'playing' ? `<button onclick="playGame('hit')" class="btn-blue flex-1 py-3 rounded-xl text-lg">Взяти</button><button onclick="playGame('stand')" class="btn flex-1 py-3 rounded-xl text-lg">Стоп</button>` : `<button onclick="openGame('blackjack')" class="btn w-full py-3 rounded-xl">Грати знову</button>`}</div>`;
     if (gameState.result) res.innerHTML = gameState.result;
   }
   else if (currentGame === 'casino') {
-    body.innerHTML = `<div class="flex justify-center gap-2 mb-4">${gameState.reels.map(r => `<div class="slot-reel">${r}</div>`).join('')}</div><button onclick="playGame()" class="btn w-full py-2">Крутити</button>`;
-    res.innerHTML = gameState.win > 0 ? `🎉 +${gameState.win} HC` : `📉 -${gameState.bet} HC`;
+    body.innerHTML = `<div class="flex justify-center gap-3 mb-6">${gameState.reels.map(r => `<div class="slot-reel">${r}</div>`).join('')}</div><button onclick="playGame()" class="btn w-full py-3 rounded-xl">Крутити ще</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎉 Виграш: +${gameState.win} HC</span>` : `<span class="text-red-400">📉 Програш: -${gameState.bet} HC</span>`;
   }
   else if (currentGame === 'dice') {
-    body.innerHTML = `<div class="flex justify-center gap-4 mb-4 text-6xl"><div class="bg-white text-black p-4 rounded-xl">${gameState.d1}</div><div class="bg-white text-black p-4 rounded-xl">${gameState.d2}</div></div><button onclick="openGame('dice')" class="btn w-full py-2">Грати знову</button>`;
-    res.innerHTML = gameState.win > 0 ? `🎉 +${gameState.win} HC` : `📉 -${gameState.bet} HC`;
+    body.innerHTML = `<div class="flex justify-center gap-6 mb-6"><div class="dice-box">${gameState.d1}</div><div class="dice-box">${gameState.d2}</div></div><button onclick="openGame('dice')" class="btn w-full py-3 rounded-xl">Грати знову</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎉 Випало ${gameState.total}! +${gameState.win} HC</span>` : `<span class="text-red-400">📉 Випало ${gameState.total}. -${gameState.bet} HC</span>`;
   }
   else if (currentGame === 'mines') {
-    body.innerHTML = `<div class="mines-grid mb-4">${[0,1,2,3,4,5,6,7,8].map(i => `<div class="mine-cell ${gameState.chosen == i ? (gameState.win > 0 ? 'gem' : 'bomb') : ''}">${gameState.chosen == i ? (gameState.win > 0 ? '💎' : '💥') : ''}</div>`).join('')}</div><button onclick="openGame('mines')" class="btn w-full py-2">Грати знову</button>`;
-    res.innerHTML = gameState.win > 0 ? `🎉 +${gameState.win} HC` : `📉 -${gameState.bet} HC`;
+    body.innerHTML = `<div class="mines-grid mb-6">${[0,1,2,3,4,5,6,7,8].map(i => {
+        let cls = "mine-cell"; let content = "";
+        if (gameState.chosen == i) { content = gameState.win > 0 ? "💎" : "💥"; cls += gameState.win > 0 ? " gem" : " bomb"; }
+        else if (gameState.bombs.includes(i)) { content = "💥"; }
+        return `<div class="${cls}">${content}</div>`;
+    }).join('')}</div><button onclick="openGame('mines')" class="btn w-full py-3 rounded-xl">Грати знову</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">💎 Скарб! +${gameState.win} HC</span>` : `<span class="text-red-400">💥 Міна! -${gameState.bet} HC</span>`;
   }
   else if (currentGame === 'rps') {
     const em = {rock: "✊", scissors: "✌️", paper: "✋"};
-    body.innerHTML = `<div class="flex justify-around items-center mb-4 text-6xl"><div>${em[gameState.user_choice]}</div><div class="text-xl text-gray-500">vs</div><div>${em[gameState.bot_choice]}</div></div><button onclick="openGame('rps')" class="btn w-full py-2">Грати знову</button>`;
-    res.innerHTML = gameState.win > gameState.bet ? `🎉 +${gameState.bet} HC` : (gameState.win === gameState.bet ? `🤝 Нічия` : `📉 -${gameState.bet} HC`);
+    body.innerHTML = `<div class="flex justify-around items-center mb-6 text-7xl drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]"><div class="animate-bounce">${em[gameState.user_choice]}</div><div class="text-xl text-gray-500">vs</div><div class="animate-bounce">${em[gameState.bot_choice]}</div></div><button onclick="openGame('rps')" class="btn w-full py-3 rounded-xl">Грати знову</button>`;
+    res.innerHTML = gameState.win > gameState.bet ? `<span class="text-green-400">🎉 Перемога! +${gameState.bet} HC</span>` : (gameState.win === gameState.bet ? `🤝 Нічия` : `<span class="text-red-400">📉 Поразка -${gameState.bet} HC</span>`);
+  }
+  else if (currentGame === 'double') {
+    body.innerHTML = `<div class="text-9xl text-center mb-6 drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]">${gameState.side === 'heads' ? '👑' : '🦅'}</div><button onclick="openGame('double')" class="btn w-full py-3 rounded-xl">Грати знову</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎉 Вгадали! +${gameState.bet} HC</span>` : `<span class="text-red-400">📉 Не вгадали -${gameState.bet} HC</span>`;
+  }
+  else if (currentGame === 'thimbles') {
+    body.innerHTML = `<div class="flex justify-around items-center mb-6 text-7xl">${[1,2,3].map(i => `<div>${gameState.win_cup === i ? "🏆" : "🥛"}</div>`).join('')}</div><button onclick="openGame('thimbles')" class="btn w-full py-3 rounded-xl">Грати знову</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎯 Вгадали! +${gameState.bet} HC</span>` : `<span class="text-red-400">📉 Мимо! -${gameState.bet} HC</span>`;
+  }
+  else if (currentGame === 'roulette') {
+    body.innerHTML = `<div class="text-8xl text-center mb-6 font-bold ${gameState.color === 'red' ? 'text-red-500 drop-shadow-[0_0_15px_red]' : (gameState.color === 'black' ? 'text-gray-900 bg-white rounded-full w-32 h-32 mx-auto flex items-center justify-center' : 'text-green-500 drop-shadow-[0_0_15px_green]')}">${gameState.number}</div><button onclick="openGame('roulette')" class="btn w-full py-3 rounded-xl">Грати знову</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎉 Виграш! +${gameState.win} HC</span>` : `<span class="text-red-400">📉 Програш -${gameState.bet} HC</span>`;
+  }
+  else if (currentGame === 'russian') {
+    body.innerHTML = `<div class="text-9xl text-center mb-6 ${gameState.bullet ? 'shake-anim' : ''}">${gameState.bullet ? '💥' : '🔫'}</div><button onclick="openGame('russian')" class="btn w-full py-3 rounded-xl">Грати знову</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">😮‍💨 Пощастило! +${gameState.win} HC</span>` : `<span class="text-red-400">💀 Бах! -${gameState.bet} HC</span>`;
+  }
+  else if (currentGame === 'wheel' || currentGame === 'smuggler') {
+    body.innerHTML = `<div class="text-8xl text-center mb-6 ${gameState.win > 0 ? 'animate-bounce' : 'shake-anim'}">${gameState.win > 0 ? '✅' : '❌'}</div><button onclick="openGame('${currentGame}')" class="btn w-full py-3 rounded-xl">Грати знову</button>`;
+    res.innerHTML = gameState.win > 0 ? `<span class="text-green-400">🎉 Успіх! +${gameState.win} HC</span>` : `<span class="text-red-400">📉 Невдача -${gameState.bet} HC</span>`;
   }
 }
 
